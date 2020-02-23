@@ -39,13 +39,13 @@ public class JdbcCrawlerDao implements CrawlerDao{
         String link = getNextLink("select link from links_to_be_processed limit 1");
         //如果link不为空，则从links_to_be_processed中删除link
         if (link != null) {
-            updateDataBase(link, "delete from links_to_be_processed where link = ?");
+            deleteLink(link, "delete from links_to_be_processed where link = ?");
         }
         return link;
 
     }
 
-    public void updateDataBase(String link, String sql) throws SQLException {
+    public void deleteLink(String link, String sql) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, link);
             statement.executeUpdate();
@@ -57,6 +57,22 @@ public class JdbcCrawlerDao implements CrawlerDao{
             statement.setString(1, link);
             statement.setString(2, title);
             statement.setString(3, content);
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
+    public void insertPrcessedLink(String link) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("insert into links_already_processed(link) values ?")) {
+            statement.setString(1, link);
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
+    public void insertLinkToBeProcessed(String href) throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("insert into links_to_be_processed(link) values ?")) {
+            statement.setString(1, href);
             statement.executeUpdate();
         }
     }

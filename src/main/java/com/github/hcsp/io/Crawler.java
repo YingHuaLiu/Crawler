@@ -39,12 +39,12 @@ public class Crawler {
                 for (Element aTag : links) {
                     String href = aTag.attr("href");
                     if (href.contains("news.sina.cn")) {
-                        dao.updateDataBase(href, "insert into links_to_be_processed(link) values ?");
+                        dao.insertLinkToBeProcessed(href);
                     }
                 }
                 storeIntoDataBaseIfItIsNewsPage(doc, link);
                 //将link存入已处理表
-                dao.updateDataBase(link, "insert into links_already_processed(link) values ?");
+                dao.insertPrcessedLink(link);
             }
         }
     }

@@ -10,9 +10,6 @@ public class News {
     private Instant createdAt;
     private Instant modifiedAt;
 
-    public News() {
-    }
-
     public News(String url, String content, String title) {
         this.url = url;
         this.content = content;
